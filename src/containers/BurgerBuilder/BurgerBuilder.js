@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Aux from '../../hoc/Ax';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../UI/Modal/Modal';
+import BurgerSummary from '../../components/Burger/BurgerSummary/BurgerSummary';
 
 
 
@@ -17,11 +19,12 @@ class BurgerBuilder extends Component {
     state = {
         ingredients: {
             salad: 0,
-            meat: 1,
+            meat: 0,
             bacon: 0,
             cheese: 0
         },
-        totalPrice: 4
+        totalPrice: 0,
+        purchasing: false
     }
 
     addIngredient = (type) => {
@@ -44,15 +47,42 @@ class BurgerBuilder extends Component {
         if (updateIngredients[type] >= 0) {
             this.setState({ ingredients: updateIngredients, totalPrice: updatePrice });
         }
+    }
 
+    purchaseHandler = () => {
+        this.setState({ purchasing: true });
+    }
+    purchaseCancelHandler = () => {
+        this.setState({ purchasing: false });
+    }
+
+    purchaseContinueHandler = () => {
+        alert(1)
     }
 
 
     render() {
+        const disabledInfo = {
+            ...this.state.ingredients
+        };
+        for (const key in disabledInfo) {
+            disabledInfo[key] = disabledInfo[key] <= 0
+        }
         return (
             <Aux>
+                <Modal show={this.state.purchasing} hide={this.purchaseCancelHandler}>
+                    <BurgerSummary ingredients={this.state.ingredients}
+                        cancel={this.purchaseCancelHandler}
+                        continue={this.purchaseContinueHandler} />
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
-                <BuildControls addedIngredients={this.addIngredient} removedIngredient={this.removeIngredient} />
+                <BuildControls
+                    addedIngredients={this.addIngredient}
+                    removedIngredient={this.removeIngredient}
+                    disabled={disabledInfo}
+                    price={this.state.totalPrice}
+                    ordered={this.purchaseHandler}
+                    canOrder={this.state.totalPrice > 0} />
             </Aux>
         );
     }
