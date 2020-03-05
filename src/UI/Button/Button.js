@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './Button.css';
 
-debugger
 const button = (props) => (
     <button
         onClick={props.clicked}

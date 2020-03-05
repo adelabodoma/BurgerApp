@@ -1,5 +1,5 @@
 import React from 'react';
-import Aux from '../../../hoc/Ax';
+import Aux from '../../../hoc/Auxiliary/Ax';
 import Button from '../../../UI/Button/Button';
 
 const burgerSummary = (props) => {
